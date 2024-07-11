@@ -13,18 +13,25 @@ public class ItemVO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long itemId;
+    @Column(name="item_id", columnDefinition = "long")
+    private Long itemId;
 
+    @Column(name="item_nm", columnDefinition = "varchar(100)")
     private String itemNm;
 
-    private int masterPrice;
+    @Column(name="master_price", columnDefinition = "int")
+    private Integer masterPrice;
 
-    private long storeId;
+    @JoinColumn(name="store_id", columnDefinition = "int")
+    private Long storeId;
 
-    private long categoryId;
+    @JoinColumn(name="category_id", columnDefinition = "int")
+    private Long categoryId;
 
+    @Column(name="use_yn", columnDefinition = "varchar(1)")
     private String useYn;
 
+    @Column(name="image", columnDefinition = "longblob")
     private byte[] image;
 
 }

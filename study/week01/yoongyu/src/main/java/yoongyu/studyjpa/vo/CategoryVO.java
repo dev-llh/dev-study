@@ -13,11 +13,15 @@ public class CategoryVO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long categoryId;
+    @Column(name="category_id", columnDefinition = "long")
+    private Long categoryId;
 
+    @Column(name="category_nm", columnDefinition = "varchar(100)")
     private String categoryNm;
 
-    private long storeId;
+    @JoinColumn(name="store_id", columnDefinition = "int")
+    private Long storeId;
 
+    @Column(name="use_yn", columnDefinition = "varchar(1)")
     private String useYn;
 }
