@@ -7,7 +7,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
+@Entity(name="category")
 @Table(name="category")
 public class CategoryVO {
 
@@ -19,9 +19,11 @@ public class CategoryVO {
     @Column(name="category_nm", columnDefinition = "varchar(100)")
     private String categoryNm;
 
-    @JoinColumn(name="store_id", columnDefinition = "int")
-    private Long storeId;
+    @ManyToOne
+    @JoinColumn(name="store_id")
+    private StoreVO storeVO;
 
     @Column(name="use_yn", columnDefinition = "varchar(1)")
     private String useYn;
+
 }

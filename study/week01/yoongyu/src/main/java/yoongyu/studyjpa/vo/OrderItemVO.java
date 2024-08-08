@@ -7,7 +7,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
+@Entity(name = "order_item")
 @Table(name="order_item")
 public class OrderItemVO {
 
@@ -22,11 +22,13 @@ public class OrderItemVO {
     @Column(name="count", columnDefinition = "int")
     private Integer count;
 
-    @JoinColumn(name="order_id", columnDefinition = "int")
-    private Long orderId;
+    @ManyToOne
+    @JoinColumn(name="order_id")
+    private OrderContentVO orderContentVO;
 
-    @JoinColumn(name="item_id", columnDefinition = "int")
-    private Long itemId;
+    @ManyToOne
+    @JoinColumn(name="item_id")
+    private ItemVO itemVO;
 
     @Column(name="use_yn", columnDefinition = "varchar(1)")
     private String useYn;

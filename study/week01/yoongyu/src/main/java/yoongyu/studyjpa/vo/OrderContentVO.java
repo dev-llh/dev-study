@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
+@Entity(name="order_content")
 @Table(name="order_content")
 public class OrderContentVO {
 
@@ -30,8 +30,9 @@ public class OrderContentVO {
     @Column(name="detail", columnDefinition = "varchar(500)")
     private String detail;
 
-    @JoinColumn(name="store_id", columnDefinition = "int")
-    private Long storeId;
+    @ManyToOne
+    @JoinColumn(name="store_id")
+    private StoreVO storeVO;
 
     @Column(name="use_yn")
     private String useYn;

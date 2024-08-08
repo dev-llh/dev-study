@@ -3,11 +3,14 @@ package yoongyu.studyjpa.vo;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
+@Entity(name = "store")
 @Table(name="store")
 public class StoreVO {
 
@@ -30,5 +33,8 @@ public class StoreVO {
 
     @Column(name="use_yn", columnDefinition = "varchar(1)")
     private String useYn;
+
+//    @OneToMany(mappedBy = "storeVO")
+//    private List<CategoryVO> categoryList = new ArrayList<>();
 
 }
