@@ -11,11 +11,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import study.springsecuritypractice.config.Role;
-import study.springsecuritypractice.service.UserService;
+import study.springsecuritypractice.service.CustomUserDetailsService;
 
 import java.io.PrintWriter;
 
@@ -23,7 +25,12 @@ import java.io.PrintWriter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserService userService;
+    private final CustomUserDetailsService customUserDetailsService;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,7 +41,7 @@ public class SecurityConfig {
                         authorizeRequest
                                 .requestMatchers(PathRequest.toH2Console()).permitAll()
                                 .requestMatchers("/", "/main", "/login/**").permitAll()
-                                .requestMatchers("/info/**").hasRole(Role.USER.name())
+                                .requestMatchers("/info/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                                 .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                                 .anyRequest().authenticated()
                 )
@@ -52,7 +59,7 @@ public class SecurityConfig {
                 .logout((logoutConfig) ->
                         logoutConfig.logoutSuccessUrl("/main")
                 )
-                .userDetailsService(userService);
+                .userDetailsService(customUserDetailsService);
 
         return http.build();
     }
