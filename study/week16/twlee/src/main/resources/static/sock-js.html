@@ -1,0 +1,32 @@
+<html>
+<body>
+<form id="form">
+    <input type="text" id="inputMessage">
+</form>
+
+<div id="messageContainer" class="message-container"></div>
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script>
+    const ws = new SockJS('http://localhost:8080/sock');
+
+    ws.onmessage = function (e) {
+        const el = document.getElementById('messageContainer');
+        const message = document.createElement("p");
+
+        message.innerText = e.data;
+        el.appendChild(message);
+    }
+
+    const form = document.getElementById('form');
+    form.addEventListener('submit', function (e) {
+       e.preventDefault();
+
+        const input = document.getElementById('inputMessage');
+       ws.send(input.value);
+
+       input.value = '';
+    });
+</script>
