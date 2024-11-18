@@ -1,0 +1,4 @@
+test:
+  name: native
+  message: application properties
+  chicken: good chicken

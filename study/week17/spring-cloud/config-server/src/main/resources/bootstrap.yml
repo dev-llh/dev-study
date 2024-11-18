@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: file:///Users/taeyang/git/NEXON_Study/spring-cloud/config  # 경로 확인 필요 (절대경로)
