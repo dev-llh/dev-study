@@ -8,7 +8,8 @@ Ktor는 Kotlin으로 개발된 비동기 서버 및 클라이언트 프레임워
 
 ## 장점
 1. **경량성과 유연성**: 불필요한 의존성을 배제하고 필요한 모듈만 추가할 수 있어 성능과 유지보수성에서 유리.
-2. **Kotlin 기반**: Kotlin의 최신 기능과 코루틴을 활용해 비동기 프로그래밍을 간단히 구현할 수 있음.
+2. **코루틴 기반 비동기 처리**: 코루틴을 활용해 비동기 I/O 처리를 기본으로 설계되었기 때문에, 필요한 네트워크 및 I/O 작업의 성능을 극대화함
+3. **Kotlin 기반**: Kotlin의 최신 기능과 코루틴을 활용해 비동기 프로그래밍을 간단히 구현할 수 있음.
 
 ---
 
@@ -32,13 +33,68 @@ Ktor는 Kotlin으로 개발된 비동기 서버 및 클라이언트 프레임워
 ## Application.kt
 애플리케이션의 엔트리 포인트로서 서버의 전반적인 설정을 정의.
 
+## Routing
+Application.kt에서 라우팅을 정의하고, 각 엔드포인트에 대한 처리를 구현.
+```kotlin
+fun Application.module() {
+    intercept(ApplicationCallPipeline.Setup) {
+        val uri = call.request.uri
+        println("Setup uri: $uri")
+
+    }
+
+    routing {
+        commonRoutes()
+        storeRoutes()
+        userRoutes()
+    }
+}
+```
+```kotlin
+fun Route.storeRoutes() {
+    val storeService = StoreService(StoreDao())
+    val objectMapper = ObjectMapper()
+
+    route("/store") {
+        intercept(ApplicationCallPipeline.Setup) {
+            val uri = call.request.uri
+            println("Setup store uri: $uri")
+
+        }
+
+        get("/all") {
+            call.respondText(objectMapper.writeValueAsString(storeService.getAllStores()))
+        }
+
+        get("gara") {
+            call.respondText(objectMapper.writeValueAsString(Store(999, "Gara", "Gara")))
+        }
+
+        get("/{id}") {
+            val id = call.parameters["id"]?.toLongOrNull()
+            if (id == null) {
+                call.respond(HttpStatusCode.BadRequest, "Invalid ID")
+                return@get
+            }
+            val user = storeService.getStoreById(id)
+            if (user == null) {
+                call.respond(HttpStatusCode.NotFound, "User not found")
+            } else {
+                call.respondText(objectMapper.writeValueAsString(user))
+            }
+        }
+    }
+}
+
+```
+
+
 ## Spring의 Bean 대응 구조
 Ktor는 Spring과 달리 전통적인 DI(Dependency Injection) 컨테이너를 제공하지 않지만,  
 Kotlin의 **코틀린 DSL**과 **모듈 시스템**을 활용하여 유사한 기능을 구현할 수 있음.
 
 - **Ktor의 DI**: Koin, Dagger 같은 외부 DI 라이브러리와 통합하여 DI 기능을 구현.
 - **Application Module**: Ktor의 Application 모듈은 Spring의 Bean과 유사하게 역할별 구성 요소를 정의하고 로드할 수 있는 구조를 제공.
-
 ```kotlin
 fun Application.module() {
     install(Routing) {
@@ -48,5 +104,38 @@ fun Application.module() {
     }
 }
 ```
+- **object**: Kotlin의 object 키워드를 이용해 객체가 생성자 없이 즉시 생성되어, Bean처럼 이용이 가능.
+```kotlin
+object UserService {
+    private val userDao: UserDao = UserDao
 
-Spring의 @Component나 @Service에 대응되는 구성 요소는 명시적으로 코딩하거나 DI 라이브러리를 통해 설정할 수 있음.
+    fun getAllUsers(): List<User> = userDao.getAllUsers()
+
+    fun getUserById(id: Long): User? = userDao.getUserById(id)
+
+    fun createUser(user: User): User {
+        if (user.name.isBlank()) {
+            throw IllegalArgumentException("Name and email must not be blank")
+        }
+        return userDao.addUser(user)
+    }
+
+    fun updateUser(id : Long, user: User): Boolean {
+        if (user.name.isBlank()) {
+            throw IllegalArgumentException("Name and email must not be blank")
+        }
+        return userDao.updateUser(id, user)
+    }
+
+    fun deleteUser(id: Long): Boolean = userDao.deleteUser(id)
+}
+```
+- **전역변수**: Application.kt에 전역으로 변수를 선언하면, 소스코드 전체에서 사용 가능.
+```kotlin
+fun Application.module() {
+    //...
+}
+val globalObjectMapper = ObjectMapper()
+```
+
+

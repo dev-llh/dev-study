@@ -3,11 +3,9 @@ package com.example.dao
 import com.example.data.User
 import javax.persistence.Persistence
 
-class UserDao {
+object UserDao {
 
-    private val entityManagerFactory = Persistence.createEntityManagerFactory("KtorStudy", mapOf(
-        "hibernate.classLoaders" to listOf(this::class.java.classLoader)
-    ))
+    private val entityManagerFactory = Persistence.createEntityManagerFactory("KtorStudy")
 
     fun getAllUsers(): List<User> {
         val em = entityManagerFactory.createEntityManager()
@@ -63,12 +61,12 @@ class UserDao {
         }
     }
 
-    fun updateUser(id: Int, user: User) : Boolean {
+    fun updateUser(id: Long, user: User) : Boolean {
         val em = entityManagerFactory.createEntityManager()
         return try {
             em.transaction.begin()
             val existingUser = em.find(User::class.java, id)
-            if (existingUser != null) {
+            if (existingUser != null && id == user.id) {
                 existingUser.name = user.name
                 em.merge(existingUser)
                 em.transaction.commit()
