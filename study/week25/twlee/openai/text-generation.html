@@ -1,0 +1,36 @@
+<html>
+  <body>
+    <textarea id="area" style="width: 600px; height: 600px;"></textarea>
+  </body>
+</html>
+
+<script>
+  (async () => {
+    const res = await handleApi()
+    const area = document.getElementById('area')
+    area.innerHTML = await res.text()
+  })()
+
+  async function handleApi() {
+    return await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '
+      },
+      body: JSON.stringify({
+        'model': 'gpt-4o-mini',
+        'messages': [
+          {
+            'role': 'developer',
+            'content': 'You are a helpful assistant.',
+          },
+          {
+            'role': 'user',
+            'content': 'let me know what is a gpt'
+          }
+        ]
+      })
+    })
+  }
+</script>

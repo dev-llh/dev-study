@@ -1,0 +1,27 @@
+<html>
+  <body>
+    <textarea id="area" style="width: 600px; height: 600px;"></textarea>
+  </body>
+</html>
+
+<script>
+  (async () => {
+    const res = await handleApi()
+    const area = document.getElementById('area')
+    area.innerHTML = await res.text()
+  })()
+
+  async function handleApi() {
+    return await fetch('https://api.openai.com/v1/embeddings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '
+      },
+      body: JSON.stringify({
+        "input": "test sentence hello world",
+        "model": "text-embedding-3-small"
+      })
+    })
+  }
+</script>

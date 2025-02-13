@@ -1,0 +1,29 @@
+<html>
+  <body>
+    <textarea id="area" style="width: 600px; height: 600px;"></textarea>
+  </body>
+</html>
+
+<script>
+  (async () => {
+    const res = await handleApi()
+    const area = document.getElementById('area')
+    area.innerHTML = await res.text()
+  })()
+
+  async function handleApi() {
+    return await fetch('https://api.openai.com/v1/images/generations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '
+      },
+      body: JSON.stringify({
+        'model': 'dall-e-2',
+        'prompt': "cat is playing nexon game",
+        "n": 1,
+        "size": "256x256"
+      })
+    })
+  }
+</script>

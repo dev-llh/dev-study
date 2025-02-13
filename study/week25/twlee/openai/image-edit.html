@@ -1,0 +1,37 @@
+<html>
+  <body>
+    <input type="file" id="input" />
+    <input type="file" id="input2" />
+    <button id="btn">실행</button>
+    <textarea id="area" style="width: 600px; height: 600px;"></textarea>
+  </body>
+</html>
+
+<script>
+  const btn = document.getElementById('btn')
+  btn.addEventListener('click', async (e) => {
+    const res = await handleApi()
+    const area = document.getElementById('area')
+    area.innerHTML = await res.text()
+  })
+
+  async function handleApi() {
+    const selectedFile = document.getElementById("input").files[0]
+    const selectedFile2 = document.getElementById("input2").files[0]
+    const formData = new FormData()
+    formData.append('model', 'dall-e-2')
+    formData.append('image', selectedFile)
+    formData.append('mask', selectedFile2)
+    formData.append('prompt', 'the dog is playing game')
+    formData.append('n', 1)
+    formData.append('size', '256x256')
+
+    return await fetch('https://api.openai.com/v1/images/edits', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer '
+      },
+      body: formData
+    })
+  }
+</script>

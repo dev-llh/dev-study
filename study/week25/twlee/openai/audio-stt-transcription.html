@@ -1,0 +1,32 @@
+<html>
+  <body>
+    <input type="file" id="input" />
+    <button id="btn">실행</button>
+    <textarea id="area" style="width: 600px; height: 600px;"></textarea>
+  </body>
+</html>
+
+<script>
+  const btn = document.getElementById('btn')
+  btn.addEventListener('click', async (e) => {
+    const res = await handleApi()
+    const area = document.getElementById('area')
+    area.innerHTML = await res.text()
+  })
+
+  async function handleApi() {
+    const selectedFile = document.getElementById("input").files[0]
+    const formData = new FormData()
+    formData.append('model', 'whisper-1')
+    formData.append('file', selectedFile)
+    formData.append('response_format', 'text')
+
+    return await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer '
+      },
+      body: formData
+    })
+  }
+</script>

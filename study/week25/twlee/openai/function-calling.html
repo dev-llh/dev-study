@@ -1,0 +1,65 @@
+<html>
+  <body>
+    <textarea id="area" style="width: 600px; height: 600px;"></textarea>
+  </body>
+</html>
+
+<script>
+  (async () => {
+    const res = await handleApi()
+    const area = document.getElementById('area')
+    area.innerHTML = await res.text()
+  })()
+
+  async function handleApi() {
+    return await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '
+      },
+      body: JSON.stringify({
+        'model': 'gpt-4o-mini',
+        "messages": [
+            {
+                "role": "user",
+                "content": "Can you send an email to lteawoo@naver.com  saying hi?"
+            }
+        ],
+        "tools": [
+            {
+                "type": "function",
+                "function": {
+                    "name": "send_email",
+                    "description": "Send an email to a given recipient with a subject and message.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "to": {
+                                "type": "string",
+                                "description": "The recipient email address."
+                            },
+                            "subject": {
+                                "type": "string",
+                                "description": "Email subject line."
+                            },
+                            "body": {
+                                "type": "string",
+                                "description": "Body of the email message."
+                            }
+                        },
+                        "required": [
+                            "to",
+                            "subject",
+                            "body"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "strict": true
+                }
+            }
+        ]
+      })
+    })
+  }
+</script>

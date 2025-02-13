@@ -1,0 +1,30 @@
+<html>
+  <body>
+    <textarea id="area" style="width: 600px; height: 600px;"></textarea>
+  </body>
+</html>
+
+<script>
+  (async () => {
+    const res = await handleApi()
+    var link = document.createElement('a')
+    link.href = window.URL.createObjectURL(await res.blob());
+    link.download = 'text.mp3'
+    link.click()
+  })()
+
+  async function handleApi() {
+    return await fetch('https://api.openai.com/v1/audio/speech', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '
+      },
+      body: JSON.stringify({
+        "model": "tts-1",
+        "input": "Hello world, i'm taewoo lee. welcome",
+        "voice": "alloy"
+      })
+    })
+  }
+</script>
