@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+motor
+qdrant-client
+transformers
+sentencepiece
+python-dotenv
+pydantic-settings
