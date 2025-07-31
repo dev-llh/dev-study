@@ -1,0 +1,209 @@
+:root[data-theme="light"] {
+  --background-color: #f8f9fa;
+  --text-color: #22223b; /* 더 진한 색상으로 변경 */
+  --card-background: #ffffff;
+  --border-color: #e2e8f0;
+  --hover-background: #f1f5f9;
+  --secondary-text-color: #4a5568;
+  --input-background: #ffffff;
+  --input-border: #e2e8f0;
+  --input-placeholder: #6b7280; /* placeholder 더 진하게 */
+  --button-text: #ffffff;
+  --button-primary: linear-gradient(135deg, #8b5cf6, #ec4899);
+  --button-secondary: #4a5568;
+  --button-ghost-hover: #f1f5f9;
+}
+
+:root[data-theme="dark"] {
+  --background-color: #181825; /* 더 어두운 배경 */
+  --text-color: #f8f8ff; /* 더 밝은 흰색 */
+  --card-background: #23233a; /* 카드 배경 더 진하게 */
+  --border-color: #2d2d4a; /* 테두리 더 진하게 */
+  --hover-background: #23233a; /* hover 배경 더 진하게 */
+  --secondary-text-color: #cbd5e1; /* secondary-text 더 밝게 */
+  --input-background: #23233a; /* 입력창 배경 더 진하게 */
+  --input-border: #3b3b5c; /* 입력창 테두리 더 진하게 */
+  --input-placeholder: #bfc4d1; /* placeholder 더 밝게 */
+  --button-text: #ffffff;
+  --button-primary: linear-gradient(135deg, #8b5cf6, #ec4899);
+  --button-secondary: #23233a; /* 버튼 배경 더 진하게 */
+  --button-ghost-hover: #23233a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app {
+  min-height: 100vh;
+  background: var(--background-color);
+  padding-bottom: 80px;
+  transition: background-color 0.3s ease;
+}
+
+.main-content {
+  padding: 16px;
+  padding-top: 70px;
+  padding-bottom: 100px;
+  min-height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+/* 그라디언트 텍스트 */
+.gradient-text {
+  background: var(--button-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 버튼 스타일 */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--button-primary);
+  color: var(--button-text);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+}
+
+.btn-secondary {
+  background: var(--button-secondary);
+  color: var(--button-text);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background: var(--hover-background);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-color);
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.btn-ghost:hover {
+  background: var(--button-ghost-hover);
+}
+
+/* 카드 스타일 */
+.card {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  border-color: var(--border-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 배지 스타일 */
+.badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--hover-background);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+/* 입력 필드 스타일 */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  background: var(--input-background);
+  color: var(--text-color);
+  font-size: 14px;
+  resize: vertical;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.input::placeholder {
+  color: var(--input-placeholder);
+}
+
+/* 스크롤바 스타일 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--hover-background);
+}
+
+/* 애니메이션 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 12px;
+    padding-top: 70px;
+  }
+}
